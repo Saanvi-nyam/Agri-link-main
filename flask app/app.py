@@ -1,3 +1,4 @@
+#flask
 from flask import Flask, render_template, request, jsonify
 import joblib
 import numpy as np
@@ -6,7 +7,7 @@ import logging
 app = Flask(__name__)
 
 # Load the trained model (NPKModel.pkl) during startup
-model_path = r'C:\Users\saura\OneDrive\Documents\GitHub\Agri-link\flask app\static\NPKModel.pkl'
+model_path = r'C:\saanvi_code\Agri-link-main\flask app\static\NPKModel.pkl'
 
 try:
     # Load the model using joblib
