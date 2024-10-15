@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Fetcher</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css">
+    <style>
+        .note {
+            margin-top: 20px;
+            font-size: 14px;
+            color: gray;
+        }
+    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"></script>
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
+        <div class="container-fluid">
+        <ul class="navbar-nav">
+            <a class="navbar-brand" href="https://bit.ly/agri-link" style="padding:5px;border-radius: 5px;font-size: 20px;font-weight: bolder;">Agrilink-software</a>
+            <li class="nav-item">
+                <a class="nav-link" style="color:white" href="{{url_for('farm')}}">Farm manager</a>
+            </li>
+            <li class="nav-item">
+
+                <a class="nav-link" style="color:white" href="{{url_for('weather')}} ">Weather Forecaster</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" style="color:white" href="{{url_for('price')}}">Price observer</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" style="color:white" href="{{url_for('soil')}}">Soil tester</a>
+            </li>
+           
+        </ul>
+        <div>
+            <a class="btn btn-info" href="main.html">Back to home</a>
+        </div>
+        </div>
+      </nav>
+      <video src="{{vid.url}}" autoplay muted loop id="backgroundVideo" style=" position: fixed;right: 0;bottom: 0;min-width: 100%;min-height: 100%;z-index: -1;object-fit: cover;">
+        <source src="{{vid.url}}" type="video/mp4">
+        Your browser does not support HTML5 video.
+    </video>
+      
+</head>
+<body style="padding-top:200px;color:white;padding-left:200px; padding-right:200px;"  class="container">
+    <div class="container">
+        <h1 class="mb-4">Price Observer</h1>
+    </div>
+            <div class="container" style="padding-bottom: 30px;">
+                <label for="food" class="form-label">Select Commodity:</label>
+                <select id="food" class="form-control" >
+                    <option value="">--Select--</option>
+                    <option value="Apple">Apple</option>
+                    <option value="Banana">Banana</option>
+                    <option value="Orange">Orange</option>
+                    <option value="Grapes">Grapes</option>
+                </select>
+            </div>
+        <div class="container" style="padding-bottom: 30px;">
+            <label for="state" class="form-label">Select State:</label>
+            <select id="state" class="form-control">
+                <option value="">--Select--</option>
+                <option value="Andhra Pradesh">Andhra Pradesh</option>
+                <option value="Karnataka">Karnataka</option>
+                <option value="Kerala">Kerala</option>
+                <option value="Manipur">Manipur</option>
+                <option value="Tamil Nadu">Tamil Nadu</option>
+                <option value="Uttar Pradesh">Uttar Pradesh</option>
+                <option value="West Bengal">West Bengal</option>
+            </select>
+        </div>
+        <div class="container" style="padding-bottom: 30px;">
+            <p></p>
+            <button class="btn btn-primary"  onclick="fetchData()">Fetch Data</button>
+        
+
+        
+            <div id="error" class="alert alert-danger mt-3 d-none"style="padding-bottom: 30px;"></div>
+            <div style="padding-bottom: 30px;" id="result" class="mt-3"></div>
+        
+            <div style="padding-bottom: 30px;" class="note">All data is per kg and data may be incorrect.</div>
+        </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script style="color:white;">
+        const data = {
+            "Apple": {
+                "Andhra Pradesh": "apple in andhra pradesh costs 135 rupees",
+                "Karnataka": "apple in karnataka costs 170 rupees",
+                "Kerala": "apple in kerla costs 230 rupees",
+                "Manipur": "Apple cost is 220 per kg in Manipur",
+                "Tamil Nadu": "Apples cost 145 ruppes in tamil nadu",
+                "Uttar Pradesh": "Apples cost 180 rupees Uttar Pradesh",
+                "West Bengal": "Apples cost 220 rupees West Bengal"
+            },
+            "Banana": {
+                "Andhra Pradesh": "bannana cost 31.2 rupees",
+                "Karnataka": "bannana cost 28 rupees",
+                "Kerala": "bannana cost 52.5 rupees",
+                "Manipur": "bannana cost 43.8 rupees",
+                "Tamil Nadu": "bannana cost 60 rupees",
+                "Uttar Pradesh": "bannana cost 30 rupees",
+                "West Bengal": "bannana cost 24 rupees"
+            },
+            "Orange": {
+                "Andhra Pradesh": "orange cost is 61 rupees",
+                "Karnataka": "orange cost is 45.6 rupees",
+                "Kerala": "orange cost is 65 rupees",
+                "Manipur": "orange cost is 70 rupees",
+                "Tamil Nadu": "orange cost is 70 rupees",
+                "Uttar Pradesh": "orange cost is 90 rupees",
+                "West Bengal": "orange cost is 70 rupees"
+            },
+            "Grapes": {
+                "Andhra Pradesh": "grape cost is 61 rupees",
+                "Karnataka": "grape cost is 90 rupees",
+                "Kerala": "grape cost is 90 rupees",
+                "Manipur": "grape cost is 80 rupees",
+                "Tamil Nadu": "grape cost is 115 rupees",
+                "Uttar Pradesh": "grape cost is 48.5 rupees",
+                "West Bengal": "grape cost is 45 rupees"
+            }
+        };
+        
+        function fetchData() {
+            const food = document.getElementById('food').value;
+            const state = document.getElementById('state').value;
+            const errorDiv = document.getElementById('error');
+            const resultDiv = document.getElementById('result');
+            
+            errorDiv.classList.add('d-none');
+            resultDiv.textContent = '';
+            
+            if (food === '' || state === '') {
+                errorDiv.textContent = 'Please select both commodity and state.';
+                errorDiv.classList.remove('d-none');
+                return;
+            }
+            
+            const result = data[food]?.[state] || 'No data available for the selected combination.';
+            resultDiv.textContent = result;
+        }
+    </script>
+</body>
+<style>
+        .nav-link:hover {
+        animation-name: incr;
+        animation-duration: 0.5s;
+        animation-fill-mode: forwards;
+        border-radius: 5px;
+        background-color:31d2f2
+        }
+</style>
+</html>

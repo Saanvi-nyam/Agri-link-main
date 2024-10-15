@@ -1,0 +1,6 @@
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 110-329-737
+INFO:werkzeug:127.0.0.1 - - [13/Sep/2024 13:12:06] "GET /soil HTTP/1.1" 200 -
+ERROR:root:Error occurred during prediction: 'dict' object has no attribute 'predict'
+INFO:werkzeug:127.0.0.1 - - [13/Sep/2024 13:12:26] "[31m[1mPOST /predict HTTP/1.1[0m" 400 -
+INFO:werkzeug: * Detected change in 'C:\\saanvi_code\\Agri-link-main\\app.py', reloading
