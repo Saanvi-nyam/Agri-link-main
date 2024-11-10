@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LightGBM Model Demo</title>
+</head>
+<body>
+
+    <h1>LightGBM Model JSON Viewer</h1>
+    <div id="output"></div> <!-- This will display the loaded JSON -->
+
+    <script>
+        // JSON content of your LightGBM model directly embedded
+        const model = {
+            "tree_info": [
+                {
+                    "tree_index": 0,
+                    "num_leaves": 5,
+                    "num_cat": 0,
+                    "shrinkage": 1,
+                    "tree_structure": {
+                        "split_index": 0,
+                        "split_feature": 27,
+                        "threshold": 1.0,
+                        "decision_type": "<=",
+                        "default_left": true,
+                        "missing_type": "None",
+                        "left_child": {
+                            "leaf_index": 0,
+                            "leaf_value": -0.5
+                        },
+                        "right_child": {
+                            "leaf_index": 1,
+                            "leaf_value": 0.5
+                        }
+                    }
+                }
+            ]
+        };
+
+        // Display the JSON in the output div
+        document.getElementById('output').textContent = JSON.stringify(model, null, 2);
+
+        // Log the model in the console to inspect its structure
+        console.log('Model loaded:', model);
+
+        // Example: Extracting a specific value from the model
+        const extractedInfo = model.tree_info[0].tree_structure.split_feature; // Extracting the split_feature from tree structure
+        console.log('Extracted Info:', extractedInfo);
+    </script>
+
+</body>
+</html>
